@@ -1,11 +1,20 @@
 package com.zoltan.toth.molecule.model.repository;
 
-import lombok.Data;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.Builder;
+import lombok.Value;
 
-@Data
+@Value
+@Builder(builderClassName = "ResponseBuilder")
+@JsonDeserialize(builder = BasicCalculateResponse.ResponseBuilder.class)
 public class BasicCalculateResponse {
-    private String group;
-    private String key;
-    private String label;
-    private String value;
+    String group;
+    String key;
+    String label;
+    String value;
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class ResponseBuilder {
+    }
 }

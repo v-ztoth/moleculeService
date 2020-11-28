@@ -1,11 +1,11 @@
 package com.zoltan.toth.molecule.model.repository;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 public class CalculateRequest {
-    private String structure;
-    private List<String> calculations;
+    String structure;
+    List<String> calculations;
 }

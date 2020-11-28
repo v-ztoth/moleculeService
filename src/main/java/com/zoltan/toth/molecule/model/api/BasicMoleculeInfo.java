@@ -1,7 +1,10 @@
 package com.zoltan.toth.molecule.model.api;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
+import java.util.Map;
+
+@Value
 public class BasicMoleculeInfo {
+    Map<String, String> info;
 }

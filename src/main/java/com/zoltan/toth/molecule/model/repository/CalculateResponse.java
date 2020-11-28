@@ -1,10 +1,10 @@
 package com.zoltan.toth.molecule.model.repository;
 
-import lombok.Data;
+import lombok.Value;
 
 import java.util.List;
 
-@Data
+@Value
 public class CalculateResponse {
-    private List<BasicCalculateResponse> calculateResponse;
+    List<BasicCalculateResponse> calculateResponse;
 }
