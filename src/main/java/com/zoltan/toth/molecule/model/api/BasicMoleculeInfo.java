@@ -6,5 +6,5 @@ import java.util.Map;
 
 @Value
 public class BasicMoleculeInfo {
-    Map<String, String> info;
+    Map<String, String> basicMoleculeInfo;
 }
