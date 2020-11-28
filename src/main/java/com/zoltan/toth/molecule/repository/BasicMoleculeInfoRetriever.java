@@ -46,7 +46,10 @@ public class BasicMoleculeInfoRetriever {
 
         HttpEntity<CalculateRequest> request = getHttpEntity(calculateRequest);
 
-        BasicCalculateResponse[] basicCalculateResponses = getBasicCalculateResponses(request, calculateRequest.getStructure());
+        BasicCalculateResponse[] basicCalculateResponses = getBasicCalculateResponses(
+                request,
+                calculateRequest.getStructure()
+        );
 
         if (basicCalculateResponses != null) {
             List<BasicCalculateResponse> basicCalculateResponseList = toList(basicCalculateResponses);
@@ -76,22 +79,30 @@ public class BasicMoleculeInfoRetriever {
                     calculateEndpoint, request, BasicCalculateResponse[].class
             );
         } catch (HttpClientErrorException ex) {
-            switch (ex.getStatusCode()) {
-                case NOT_FOUND:
-                    log.info("No data found for molecule " + molecule);
-                    break;
-                case BAD_REQUEST:
-                    log.info("Invalid molecule " + molecule);
-                    throw new CalculateApiException("Invalid molecule " + molecule);
-                default:
-                    log.info("Calculate API Client error occurred " + ex);
-                    throw new CalculateApiException("Calculate API Client error occurred " + ex.getMessage());
-            }
+            handleApiClientError(molecule, ex);
         } catch (HttpServerErrorException ex) {
-            log.info("Calculate API Client exception occurred " + ex);
-            throw new CalculateApiException("Calculate API Server exception occurred " + ex.getMessage());
+            handleApiServerError(ex);
         }
         return basicCalculateResponses;
+    }
+
+    private void handleApiServerError(HttpServerErrorException ex) {
+        log.info("Calculate API Client exception occurred " + ex);
+        throw new CalculateApiException("Calculate API Server exception occurred " + ex.getMessage());
+    }
+
+    private void handleApiClientError(String molecule, HttpClientErrorException ex) {
+        switch (ex.getStatusCode()) {
+            case NOT_FOUND:
+                log.info("No data found for molecule " + molecule);
+                break;
+            case BAD_REQUEST:
+                log.info("Invalid molecule " + molecule);
+                throw new CalculateApiException("Invalid molecule " + molecule);
+            default:
+                log.info("Calculate API Client error occurred " + ex);
+                throw new CalculateApiException("Calculate API Client error occurred " + ex.getMessage());
+        }
     }
 
     private List<BasicCalculateResponse> toList(BasicCalculateResponse[] basicCalculateResponses) {
